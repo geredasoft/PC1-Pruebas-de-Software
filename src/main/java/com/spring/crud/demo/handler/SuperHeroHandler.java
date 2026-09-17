@@ -50,8 +50,10 @@ public class SuperHeroHandler {
 
     public Mono<ServerResponse> delete(ServerRequest serverRequest) {
         int id = Integer.parseInt(serverRequest.pathVariable("id"));
-        Mono<Void> superHeroMono = reactiveSuperHeroService.delete(id);
-        return ServerResponse.ok().body("Deleted successfully...!", String.class);
+
+        return reactiveSuperHeroService.delete(id)
+                .then(ServerResponse.ok()
+                        .bodyValue("Deleted successfully...!"));
     }
 
 }

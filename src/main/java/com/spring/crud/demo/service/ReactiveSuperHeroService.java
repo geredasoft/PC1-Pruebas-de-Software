@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface ReactiveSuperHeroService {
 
-    Flux<?> findAll();
+    Flux<SuperHero> findAll();
 
     Mono<SuperHero> findById(int id);
 

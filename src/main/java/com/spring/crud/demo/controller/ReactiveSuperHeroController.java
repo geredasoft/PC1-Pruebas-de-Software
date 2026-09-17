@@ -19,33 +19,32 @@ public class ReactiveSuperHeroController {
 
     @Operation(summary = "Try this endpoint in chrome, postman doesn't support for reactive programming")
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<Flux<?>> findAll() {
-        Flux<?> list = reactiveSuperHeroService.findAll();
+    public ResponseEntity<Flux<SuperHero>> findAll() {
+        Flux<SuperHero> list = reactiveSuperHeroService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
-
     @GetMapping("/{id}")
-    public Mono<?> findById(@PathVariable int id) {
+    public Mono<SuperHero> findById(@PathVariable int id) {
         return reactiveSuperHeroService.findById(id);
     }
 
-
     @PostMapping
-    public Mono<?> save(@RequestBody SuperHero superHero) {
+    public Mono<SuperHero> save(@RequestBody SuperHero superHero) {
         return reactiveSuperHeroService.save(superHero);
     }
 
-
     @PutMapping("/{id}")
-    public Mono<?> update(@PathVariable int id, @RequestBody SuperHero superHero) {
+    public Mono<SuperHero> update(
+            @PathVariable int id,
+            @RequestBody SuperHero superHero) {
+
         return reactiveSuperHeroService.update(id, superHero);
     }
 
-
     @DeleteMapping("/{id}")
-    public Mono<?> delete(@PathVariable int id) {
-        Mono<Void> monoVoid = reactiveSuperHeroService.delete(id);
-        return Mono.just("Deleted successfully...!");
+    public Mono<String> delete(@PathVariable int id) {
+        return reactiveSuperHeroService.delete(id)
+                .thenReturn("Deleted successfully...!");
     }
 }

@@ -24,7 +24,7 @@ public class ReactiveSuperHeroServiceImpl implements ReactiveSuperHeroService {
     //private ReactiveSuperHeroRepository reactiveSuperHeroRepository;
 
     @Override
-    public Flux<?> findAll() {
+    public Flux<SuperHero> findAll() {
         //Flux<SuperHero> superHeroes = reactiveSuperHeroRepository.findAll();
 
         List<SuperHero> superHeroes = repository.findAll();
@@ -38,11 +38,14 @@ public class ReactiveSuperHeroServiceImpl implements ReactiveSuperHeroService {
 
     @Override
     public Mono<SuperHero> findById(int id) {
-        //return reactiveSuperHeroRepository.findById(id).switchIfEmpty(Mono.error(new NotFoundException("** Superhero not found for id :: " + id)));
+        return Mono.defer(() -> {
+            SuperHero superHero = repository.findById(id)
+                    .orElseThrow(() -> new NotFoundException(
+                            "** Superhero not found for id :: " + id
+                    ));
 
-        SuperHero superHero = repository.findById(id).orElseThrow(() -> new NotFoundException("** Superhero not found for id :: " + id));
-        return Mono.just(superHero)
-                .log();     // log() to print event stream on console. Check console for event logs
+            return Mono.just(superHero);
+        }).log();
     }
 
     @Override
@@ -56,11 +59,15 @@ public class ReactiveSuperHeroServiceImpl implements ReactiveSuperHeroService {
 
     @Override
     public Mono<SuperHero> update(int id, SuperHero superHero) {
-        //reactiveSuperHeroRepository.findById(id).switchIfEmpty(Mono.error(new NotFoundException("** Superhero not found for id :: " + id)));
+        return Mono.defer(() -> {
+            repository.findById(id)
+                    .orElseThrow(() -> new NotFoundException(
+                            "** Superhero not found for id :: " + id
+                    ));
 
-        repository.findById(id).orElseThrow(() -> new NotFoundException("** Superhero not found for id :: " + id));
-        superHero.setId(id);
-        return this.save(superHero);
+            superHero.setId(id);
+            return this.save(superHero);
+        });
     }
 
     @Override
