@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SuperHeroService {
 
-    List<?> findAll();
+    List<SuperHero> findAll();
 
     SuperHero findById(int id);
 
