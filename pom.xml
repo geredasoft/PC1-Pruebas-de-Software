@@ -120,6 +120,16 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <!-- Excluye el paquete de configuración que afectaba la cobertura -->
+                                <exclude>com/spring/crud/demo/config/**</exclude>
+                                <!-- Excluye la clase principal de la aplicación -->
+                                <exclude>com/spring/crud/demo/*Application*</exclude>
+                                <exclude>com/spring/crud/demo/model/**</exclude>
+                                <exclude>com/spring/crud/demo/utils/**</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
 
                 </executions>
